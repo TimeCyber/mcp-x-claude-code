@@ -1,0 +1,5 @@
+fix: Windows conhost rendering improvements
+
+- Disable npm deprecation notice via DISABLE_INSTALLATION_CHECKS
+- Add CJK wide char cursor compensation for Windows conhost
+- Update .env and .env.example

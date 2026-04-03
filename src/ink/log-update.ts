@@ -40,6 +40,10 @@ type Options = {
 const CARRIAGE_RETURN = { type: 'carriageReturn' } as const
 const NEWLINE = { type: 'stdout', content: '\n' } as const
 
+// Windows cmd/conhost: CJK wide chars may cause cursor position drift.
+// Force CHA (cursor horizontal absolute) after every wide char to resync.
+const IS_WIN_CONHOST = process.platform === 'win32' && !process.env.WT_SESSION
+
 export class LogUpdate {
   private state: State
 
@@ -659,7 +663,7 @@ function writeCellWithStyleStr(
     diff.push({ type: 'styleStr', str: styleStr })
   }
 
-  const needsCompensation = cellWidth === 2 && needsWidthCompensation(cell.char)
+  const needsCompensation = cellWidth === 2 && (needsWidthCompensation(cell.char) || IS_WIN_CONHOST)
 
   // On terminals with old wcwidth tables, a compensated emoji only advances
   // the cursor 1 column, so the CHA below skips column x+1 without painting
