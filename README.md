@@ -1,4 +1,4 @@
-# Claude Code Haha
+# MCP-X Claude Code
 
 基于 Claude Code 泄露源码修复的**本地可运行版本**，支持接入任意 Anthropic 兼容 API（如 MiniMax、OpenRouter 等）。
 
@@ -173,6 +173,36 @@ src/
 | CLI 解析 | Commander.js |
 | API | Anthropic SDK |
 | 协议 | MCP, LSP |
+
+---
+
+## Windows 兼容性优化
+
+针对 Windows `cmd`/`conhost` 环境（非 Windows Terminal）的显示问题进行了专项优化，解决了 Unicode 字符无法正常渲染导致的界面乱码问题。
+
+### 全局命令 `mcp-x`
+
+新增 `bin/mcp-x.cmd` 启动脚本，支持通过全局命令直接启动：
+
+```bash
+# 安装全局命令
+npm link
+
+# 之后在任意目录直接运行
+mcp-x
+```
+
+### 界面渲染修复
+
+| 问题 | 根因 | 修复 |
+|------|------|------|
+| 欢迎页 Logo 显示方块 | `Clawd` 组件使用 Unicode block elements（`▛▜▙█` 等），cmd 字体不支持 | Windows cmd 下改用 ASCII art 渲染 |
+| 欢迎页背景图案乱码 | `WelcomeV2` 使用大量 Unicode 半块字符（`░▒▓█`） | Windows cmd 下改用简化 ASCII 版本 |
+| Buddy 精灵眼睛显示方块 | 眼睛字符 `✦◉` 在 cmd 下不可渲染 | 映射为 ASCII 等价字符（`*` `O`） |
+| Loading 动画字符乱码 | Spinner 帧字符 `✢✳✶✻✽` 在 cmd 下显示为方块 | Windows cmd 下改用 `. o O * O o` 序列 |
+| 状态指示符乱码 | `●◐◉◇◆✻∙` 等 Unicode 符号不可渲染 | 全部替换为 ASCII 等价字符 |
+
+> 以上修复仅在 `Windows cmd/conhost` 下生效。使用 **Windows Terminal** 的用户不受影响，仍显示原版 Unicode 效果。
 
 ---
 

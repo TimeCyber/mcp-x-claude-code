@@ -5,6 +5,10 @@ export function getDefaultCharacters(): string[] {
   if (process.env.TERM === 'xterm-ghostty') {
     return ['·', '✢', '✳', '✶', '✻', '*'] // Use * instead of ✽ for Ghostty because the latter renders in a way that's slightly offset
   }
+  // Windows cmd/conhost can't render Unicode star characters properly
+  if (process.platform === 'win32' && !process.env.WT_SESSION) {
+    return ['.', 'o', 'O', '*', 'O', 'o']
+  }
   return process.platform === 'darwin'
     ? ['·', '✢', '✳', '✶', '✻', '✽']
     : ['·', '✢', '*', '✶', '✻', '✽']

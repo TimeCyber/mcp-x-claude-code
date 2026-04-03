@@ -84,6 +84,34 @@ export function Clawd(t0) {
     pose: t2
   } = t1;
   const pose = t2 === undefined ? "default" : t2;
+  // Windows cmd/conhost can't render Unicode block elements properly
+  if (env.platform === "win32" && env.terminal !== "windows-terminal") {
+    let t3;
+    if ($[2] !== pose) {
+      t3 = <Box flexDirection="column">
+        <Text color="clawd_body">{"  /-----\\  "}</Text>
+        <Text color="clawd_body">{" | o   o | "}</Text>
+        <Text color="clawd_body">{" |       | "}</Text>
+        <Text color="clawd_body">{"  \\_____/  "}</Text>
+        <Text color="clawd_body">{"   |   |   "}</Text>
+      </Box>;
+      $[2] = pose;
+      $[3] = t3;
+    } else {
+      t3 = $[3];
+    }
+    return t3;
+  }
+  // Windows cmd/conhost can't render Unicode block elements properly
+  if (env.platform === "win32" && env.terminal !== "windows-terminal") {
+    return <Box flexDirection="column">
+      <Text color="clawd_body">{"  /-----\\  "}</Text>
+      <Text color="clawd_body">{" | o   o | "}</Text>
+      <Text color="clawd_body">{" |       | "}</Text>
+      <Text color="clawd_body">{"  \\_____/  "}</Text>
+      <Text color="clawd_body">{"   |   |   "}</Text>
+    </Box>;
+  }
   if (env.terminal === "Apple_Terminal") {
     let t3;
     if ($[2] !== pose) {

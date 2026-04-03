@@ -6,6 +6,24 @@ const WELCOME_V2_WIDTH = 58;
 export function WelcomeV2() {
   const $ = _c(35);
   const [theme] = useTheme();
+  // Windows cmd/conhost can't render Unicode block elements properly
+  if (env.platform === "win32" && env.terminal !== "windows-terminal") {
+    return <Box width={WELCOME_V2_WIDTH}>
+      <Text>
+        <Text><Text color="claude">{"Welcome to Claude Code"} </Text><Text dimColor={true}>v{MACRO.VERSION} </Text></Text>
+        <Text>{"----------------------------------------------------------"}</Text>
+        <Text>{"                                                          "}</Text>
+        <Text>{"                                                          "}</Text>
+        <Text>{"          /-----\\                                         "}</Text>
+        <Text>{"         | o   o |                                        "}</Text>
+        <Text>{"         |       |                                        "}</Text>
+        <Text>{"          \\_____/                                         "}</Text>
+        <Text>{"           |   |                                          "}</Text>
+        <Text>{"                                                          "}</Text>
+        <Text>{"----------------------------------------------------------"}</Text>
+      </Text>
+    </Box>;
+  }
   if (env.terminal === "Apple_Terminal") {
     let t0;
     if ($[0] !== theme) {

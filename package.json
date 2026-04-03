@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "bin": {
-    "claude-haha": "./bin/claude-haha"
+    "mcp-x": "./bin/mcp-x.cmd"
   },
   "scripts": {
-    "claude-haha": "bun --env-file=.env ./src/entrypoints/cli.tsx",
+    "mcp-x": "bun --env-file=.env ./src/entrypoints/cli.tsx",
     "start": "bun --env-file=.env ./src/entrypoints/cli.tsx"
   },
   "dependencies": {

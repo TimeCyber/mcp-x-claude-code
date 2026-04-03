@@ -1,4 +1,5 @@
 import type { CompanionBones, Eye, Hat, Species } from './types.js'
+import { env } from '../utils/env.js'
 import {
   axolotl,
   blob,
@@ -451,10 +452,27 @@ const HAT_LINES: Record<Hat, string> = {
   tinyduck: '    ,>      ',
 }
 
+// Windows cmd fallback: replace Unicode eyes that render as boxes
+const WIN_CMD = env.platform === 'win32' && env.terminal !== 'windows-terminal'
+const WIN_EYE_FALLBACK: Record<string, string> = {
+  '✦': '*',
+  '◉': 'O',
+  '·': '.',
+  '×': 'x',
+  '@': '@',
+  '°': 'o',
+}
+
+function safeEye(eye: Eye): string {
+  if (WIN_CMD && WIN_EYE_FALLBACK[eye]) return WIN_EYE_FALLBACK[eye]
+  return eye
+}
+
 export function renderSprite(bones: CompanionBones, frame = 0): string[] {
   const frames = BODIES[bones.species]
+  const eye = safeEye(bones.eye)
   const body = frames[frame % frames.length]!.map(line =>
-    line.replaceAll('{E}', bones.eye),
+    line.replaceAll('{E}', eye),
   )
   const lines = [...body]
   // Only replace with hat if line 0 is empty (some fidget frames use it for smoke etc)
@@ -473,7 +491,7 @@ export function spriteFrameCount(species: Species): number {
 }
 
 export function renderFace(bones: CompanionBones): string {
-  const eye: Eye = bones.eye
+  const eye = safeEye(bones.eye)
   switch (bones.species) {
     case duck:
     case goose:

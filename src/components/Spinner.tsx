@@ -36,7 +36,9 @@ import { getCurrentTurnTokenBudget, getTurnOutputTokens } from '../bootstrap/sta
 import { TeammateSpinnerTree } from './Spinner/TeammateSpinnerTree.js';
 import { useAnimationFrame } from '../ink.js';
 import { getGlobalConfig } from '../utils/config.js';
+import { env } from '../utils/env.js';
 export type { SpinnerMode } from './Spinner/index.js';
+const isWinCmd = env.platform === 'win32' && env.terminal !== 'windows-terminal';
 const DEFAULT_CHARACTERS = getDefaultCharacters();
 const SPINNER_FRAMES = [...DEFAULT_CHARACTERS, ...[...DEFAULT_CHARACTERS].reverse()];
 type Props = {
@@ -512,7 +514,7 @@ export function Spinner() {
   if (reducedMotion) {
     let t0;
     if ($[0] === Symbol.for("react.memo_cache_sentinel")) {
-      t0 = <Text color="text">●</Text>;
+      t0 = <Text color="text">{isWinCmd ? 'o' : '●'}</Text>;
       $[0] = t0;
     } else {
       t0 = $[0];
